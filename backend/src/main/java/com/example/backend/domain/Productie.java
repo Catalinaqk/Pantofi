@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 
@@ -26,33 +27,22 @@ public class Productie {
      * Unique identifier for the production record.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idProductie", unique = true, updatable = false, nullable = false)
-    private Long id;
+    @UuidGenerator
+    @Column(name = "id", unique = true, updatable = false)
+    private String id;
 
     /**
      * Name of the worker.
      */
-    @Column(name = "numeLucrator", nullable = false)
     private String numeLucrator;
 
     /**
      * Quantity of the product.
      */
-    @Column(name = "cantitateProdusa", nullable = false)
-    private int cantitateProdusa;
-
-    /**
-     * Identifier of the associated material.
-     */
-    @ManyToOne
-    @JoinColumn(name = "idMateriale", referencedColumnName = "idMateriale")
-    @JsonBackReference
-    private Materiale materiale;
+    private String cantitateProdusa;
 
     /**
      * Date of the production.
      */
-    @Column(name = "data", nullable = false)
-    private LocalDate date;
+    private String data;
 }

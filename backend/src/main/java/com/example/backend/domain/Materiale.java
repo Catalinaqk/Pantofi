@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 
@@ -22,52 +23,50 @@ import java.time.LocalDate;
 public class Materiale {
 
     /**
-     * Unique identifier for the material record.
+     * Unique identifier for the material.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idMateriale", unique = true, updatable = false, nullable = false)
-    private Long id;
+    @UuidGenerator
+    @Column(name = "id", unique = true, updatable = false)
+    private String id;
 
     /**
      * Name of the material.
      */
-    @Column(name = "nume", nullable = false)
     private String nume;
 
     /**
      * Type of the material.
      */
-    @Column(name = "tip", nullable = false)
     private String tip;
 
     /**
      * Status of the material.
      */
-    @Column(name = "status", nullable = false)
     private String status;
 
     /**
      * Price of the material.
      */
-    @Column(name = "cost", nullable = false)
-    private double cost;
+    private String cost;
 
     /**
      * Quantity of the material.
      */
-    @Column(name = "cantitate", nullable = false)
-    private int cantitate;
+    private String cantitate;
 
     /**
      * Date of the material.
      */
-    @Column(name = "data", nullable = false)
-    private LocalDate data;
+    private String data;
 
     /**
      * Description of the material.
      */
-    @Column(name = "descriere", nullable = false)
     private String descriere;
+
+    /**
+     * URL of the material's photo.
+     */
+    private String photoURL;
 }

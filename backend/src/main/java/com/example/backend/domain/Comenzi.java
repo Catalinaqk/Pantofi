@@ -7,9 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
-
 
 /**
  * Entity class representing a Comenzi (Orders).
@@ -24,56 +24,42 @@ import java.time.LocalDate;
 public class Comenzi {
 
         /**
-         * Unique identifier for the order record.
+         * Unique identifier for the order.
          */
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "idComanda", unique = true, updatable = false, nullable = false)
-        private Long idComanda;
+        @UuidGenerator
+        @Column(name = "id", unique = true, updatable = false)
+        private String id;
 
         /**
          * Name of the order.
          */
-        @Column(name = "nume", nullable = false)
         private String nume;
 
         /**
          * Status of the order.
          */
-        @Column(name = "status", nullable = false)
         private String status;
 
         /**
          * Price of the order.
          */
-        @Column(name = "cost", nullable = false)
-        private double cost;
+        private String cost;
 
         /**
          * Quantity of the order.
          */
-        @Column(name = "cantitate", nullable = false)
-        private int cantitate;
+        private String cantitate;
 
         /**
          * Date of the order.
          */
-        @Column(name = "data", nullable = false)
-        private LocalDate data;
+        private String data;
 
         /**
          * Description of the order.
          */
-        @Column(name = "descriere", nullable = false)
         private String descriere;
-
-        /**
-         * Identifier of the associated material.
-         */
-        @ManyToOne
-        @JoinColumn(name = "idMateriale", referencedColumnName = "idMateriale")
-        @JsonBackReference
-        private Materiale materiale;
 
 
 }
