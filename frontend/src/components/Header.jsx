@@ -1,12 +1,9 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { loginDepartament } from '../api/DepartamentService';
 
-const Header = ({ departamentType, departamentName,
-                    setDepartamentType, setDepartamentName, setDepartamentEmail
-                }) => {
+const Header = ({ departamentType, departamentName, setDepartamentType, setDepartamentName, setDepartamentEmail }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -33,7 +30,6 @@ const Header = ({ departamentType, departamentName,
             localStorage.setItem('departamentType', departament.type);
             localStorage.setItem('departamentName', departament.name);
             localStorage.setItem('departamentEmail', departament.email);
-            // eslint-disable-next-line no-unused-vars
         } catch (error) {
             setError('Email sau parola incorecta!');
         }
@@ -52,14 +48,12 @@ const Header = ({ departamentType, departamentName,
         <nav className="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
             <div className="container-fluid">
                 <h3 className="text-white">Departamentul de {departamentName}</h3>
-                {departamentType === 'admin' &&
-                    <>
-                        <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMaterialBackdrop">
-                            Adauga material
-                        </button>
-                    </>
-                }
-                {departamentType === 'guest' &&
+                {departamentType === 'admin' && (
+                    <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMaterialBackdrop">
+                        Adauga material
+                    </button>
+                )}
+                {departamentType === 'guest' && (
                     <div className="dropdown">
                         <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
                                 aria-expanded="false" data-bs-auto-close="outside">
@@ -87,8 +81,8 @@ const Header = ({ departamentType, departamentName,
                             <Link className="dropdown-item" to="/forgot-password">Ai uitat parola?</Link>
                         </div>
                     </div>
-                }
-                {departamentType !== 'guest' &&
+                )}
+                {departamentType !== 'guest' && (
                     <div className="dropdown">
                         <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
                                 aria-expanded="false" data-bs-auto-close="outside">
@@ -99,7 +93,7 @@ const Header = ({ departamentType, departamentName,
                             <button className="dropdown-item" onClick={handleLogout}>Deconectare</button>
                         </div>
                     </div>
-                }
+                )}
             </div>
         </nav>
     );
@@ -108,11 +102,9 @@ const Header = ({ departamentType, departamentName,
 Header.propTypes = {
     departamentType: PropTypes.string.isRequired,
     departamentName: PropTypes.string.isRequired,
-    departamentEmail: PropTypes.string.isRequired,
     setDepartamentType: PropTypes.func.isRequired,
     setDepartamentName: PropTypes.func.isRequired,
     setDepartamentEmail: PropTypes.func.isRequired,
-    nbOfMaterials: PropTypes.number.isRequired,
 };
 
 export default Header;

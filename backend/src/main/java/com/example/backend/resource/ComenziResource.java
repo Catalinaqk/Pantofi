@@ -2,53 +2,46 @@ package com.example.backend.resource;
 
 import com.example.backend.domain.Comenzi;
 import com.example.backend.service.ComenziService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
-@Slf4j
+/**
+ * REST controller for managing Comenzi entities.
+ */
 @RestController
-@RequestMapping("/comenzi")
-@RequiredArgsConstructor
+@RequestMapping("/api/comenzi")
 public class ComenziResource {
+
     private final ComenziService comenziService;
 
-    /**
-     * Creates a new comenzi.
-     *
-     * @param comenzi the comenzi to create.
-     * @return the ResponseEntity with status 201 (Created) and with body the new comenzi.
-     */
-    @PostMapping
-    public ResponseEntity<Comenzi> createComenzi(@RequestBody Comenzi comenzi){
-        return ResponseEntity.created(URI.create("/comenzi/comenziID")).body(comenziService.createComenzi(comenzi));
+    @Autowired
+    public ComenziResource(ComenziService comenziService) {
+        this.comenziService = comenziService;
     }
 
-    /**
-     * Gets all comenzi.
-     *
-     * @return the ResponseEntity with status 200 (OK) and the list of comenzi in body.
-     */
     @GetMapping
-    public ResponseEntity<List<Comenzi>> getComenzi(){
-        return ResponseEntity.ok().body(comenziService.getAllComenzi());
+    public List<Comenzi> getAllComenzi() {
+        return comenziService.findAllComenzi();
     }
 
-    /**
-     * Gets a comenzi by its unique identifier.
-     *
-     * @param id the unique identifier of the comenzi.
-     * @return the ResponseEntity with status 200 (OK) and with body the comenzi.
-     */
     @GetMapping("/{id}")
-    public ResponseEntity<Comenzi> getComenziById(@PathVariable(value = "id") Long id){
-        return ResponseEntity.ok().body(comenziService.getComenziById(id));
+    public ResponseEntity<Comenzi> getComenziById(@PathVariable String id) {
+        Optional<Comenzi> comenzi = comenziService.findComenziById(id);
+        return comenzi.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping
+    public Comenzi createComenzi(@RequestBody Comenzi comenzi) {
+        return comenziService.saveComenzi(comenzi);
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteComenziById(@PathVariable String id) {
+        comenziService.deleteComenziById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

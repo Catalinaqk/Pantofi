@@ -1,36 +1,23 @@
-import {HashRouter, Link, Navigate, Route, Routes} from "react-router-dom";
-import HomePage from "./pages/HomePage.jsx";
-import Register from "./pages/Register.jsx";
-import ForgotPassword from "./pages/ForgotPassword.jsx";
+// eslint-disable-next-line no-unused-vars
+import React from 'react';
+// eslint-disable-next-line no-unused-vars
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import MainNavigation from './components/MainNavigation';
+import MaterialePage from './pages/MaterialePage';
+import ComenziPage from './pages/ComenziPage';
+import ProductiePage from './pages/ProductiePage';
 
-
-/**
- * App component
- * @returns {JSX.Element} The rendered App component.
- * @constructor
- */
-function App() {
-
+const App = () => {
     return (
-        <HashRouter>
-            <div className="container-fluid">
-                <div className="d-flex justify-content-center">
-                    <Link to="/" className="navbar-brand bg-transparent text-dark">
-                        <div className="d-flex align-items-center">
-                            <h1>Automatizarea Materialelor</h1>
-                        </div>
-                    </Link>
-                </div>
-            </div>
-            <Routes>
-                <Route path="/" element={<Navigate to={"/books"}/>}/>
-                <Route path="/material" element={<HomePage/>}/>
-                <Route path="/register" element={<Register/>}/>
-                <Route path="/forgot-password" element={<ForgotPassword/>}/>
-            </Routes>
-        </HashRouter>
+        <Router>
+            <MainNavigation />
+            <Switch>
+                <Route path="/materiale" component={MaterialePage} />
+                <Route path="/comenzi" component={ComenziPage} />
+                <Route path="/productie" component={ProductiePage} />
+            </Switch>
+        </Router>
     );
-
-}
+};
 
 export default App;

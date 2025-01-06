@@ -7,7 +7,7 @@ import Header from '../components/Header';
 
 function HomePage() {
     const fileMaterialRef = useRef(null);
-    const [data, setData] = useState({});
+    const [data, setData] = useState([]);
     const [userType, setUserType] = useState('guest');
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
@@ -21,21 +21,13 @@ function HomePage() {
         date: "",
         description: ""
     });
-    const [valuesComenzi, setValuesComenzi] = useState({
-        name: "",
-        status: "",
-        price: "",
-        quantity: "",
-        date: "",
-        description: ""
-    });
     const [comenzi, setComenzi] = useState([]);
     const [searchterm, setSearchterm] = useState('');
 
     const getAllMaterialsNoPagination = async () => {
         try {
-            const { data } = await getMaterialsNoPagination();
-            setData(data);
+            const response = await getMaterialsNoPagination();
+            setData(response.data);
         } catch (error) {
             console.error("Error getting materials", error);
         }
@@ -43,8 +35,8 @@ function HomePage() {
 
     const getAllComenzi = async () => {
         try {
-            const { data } = await getComenzi();
-            setComenzi(data);
+            const response = await getComenzi();
+            setComenzi(response.data);
         } catch (error) {
             console.error("Error getting comenzi", error);
         }
@@ -54,10 +46,6 @@ function HomePage() {
         setValuesMaterial({ ...valuesMaterial, [event.target.name]: event.target.value });
     };
 
-    const onchangeComenzi = (event) => {
-        setValuesComenzi({ ...valuesComenzi, [event.target.name]: event.target.value });
-    };
-
     const onchangeMaterialFile = (event) => {
         setFileMaterial(event.target.files[0]);
     };
@@ -65,17 +53,16 @@ function HomePage() {
     const handleNewMaterial = async (event) => {
         event.preventDefault();
         try {
-            const { data } = await saveMaterial(valuesMaterial);
+            const response = await saveMaterial(valuesMaterial);
             const formData = new FormData();
             formData.append('file', fileMaterial, fileMaterial.name);
-            formData.append("id", data.id);
+            formData.append("id", response.data.id);
             await saveMaterialPhoto(formData);
             setFileMaterial(undefined);
             fileMaterialRef.current.value = null;
             setValuesMaterial({
                 name: "",
                 type: "",
-                comenziId: "",
                 status: "",
                 price: "",
                 quantity: "",
@@ -93,13 +80,13 @@ function HomePage() {
         getAllComenzi();
     }, []);
 
-    const filteredComenzi = comenzi.filter(comenzi =>
-        `${comenzi.name} ${comenzi.status} ${comenzi.price} ${comenzi.quantity} ${comenzi.date} ${comenzi.description}`.toLowerCase().includes(searchterm.toLowerCase())
+    const filteredComenzi = comenzi.filter(comanda =>
+        `${comanda.name} ${comanda.status} ${comanda.price} ${comanda.quantity} ${comanda.date} ${comanda.description}`.toLowerCase().includes(searchterm.toLowerCase())
     );
 
     return (
         <>
-            <Header departamentType={userType} departamentName={userName} departamentEmail={userEmail} setDepartamentType={setUserType} setDepartamentName={setUserName} setDepartamentEmail={setUserEmail} nbOfMaterials={data.totalElements} />
+            <Header departamentType={userType} departamentName={userName} departamentEmail={userEmail} setDepartamentType={setUserType} setDepartamentName={setUserName} setDepartamentEmail={setUserEmail} nbOfMaterials={data.length} />
             <main className="main">
                 <div className="container-fluid mt-3 mb-3">
                     <MaterialList materials={data} comenzi={comenzi} />
@@ -130,19 +117,12 @@ function HomePage() {
                                            aria-describedby="inputGroup-sizing-default" placeholder="Search comenzi" />
                                     <select name="comenziId" value={valuesMaterial.comenziId} onChange={onchangeMaterial} className="form-control" required>
                                         <option value="">Selectează comanda</option>
-                                        {filteredComenzi.map(comenzi => (
-                                            <option key={comenzi.id} value={comenzi.id}>
-                                                {comenzi.name} {comenzi.status} {comenzi.price} {comenzi.quantity} {comenzi.date} {comenzi.description}
+                                        {filteredComenzi.map(comanda => (
+                                            <option key={comanda.id} value={comanda.id}>
+                                                {comanda.name} {comanda.status} {comanda.price} {comanda.quantity} {comanda.date} {comanda.description}
                                             </option>
                                         ))}
                                     </select>
-                                </div>
-                                <div className="input-group mb-3">
-                                    <span className="input-group-text" id="inputGroup-sizing-default">Data comenzii:</span>
-                                    <input type="text" value={valuesComenzi.date} name="date"
-                                           onChange={onchangeComenzi} className="form-control"
-                                           aria-label="Sizing example input"
-                                           aria-describedby="inputGroup-sizing-default" required />
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text" id="inputGroup-sizing-default">Tip:</span>
@@ -181,7 +161,7 @@ function HomePage() {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="formFileMaterial" className="form-label">Adaugă poză:</label>
-                                    <input className="form-control" type="file" id="formFileBook" ref={fileMaterialRef}
+                                    <input className="form-control" type="file" id="formFileMaterial" ref={fileMaterialRef}
                                            name="photoURL" onChange={onchangeMaterialFile} required />
                                 </div>
                             </div>
