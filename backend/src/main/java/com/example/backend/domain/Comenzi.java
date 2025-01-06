@@ -1,68 +1,79 @@
 package com.example.backend.domain;
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDate;
+
+
+/**
+ * Entity class representing a Comenzi (Orders).
+ */
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_DEFAULT) // exclude null fields
-@Table(name = "comenzi_produse")
-
+@Table(name = "comenzi")
 public class Comenzi {
 
         /**
-         * Unique identifier for the comenzi.
+         * Unique identifier for the order record.
          */
         @Id
-        @UuidGenerator
-        @Column(name = "id", unique = true, updatable = false)
-        private String id;
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(name = "idComanda", unique = true, updatable = false, nullable = false)
+        private Long idComanda;
 
         /**
-         * Unique identifier for the material.
+         * Name of the order.
          */
-        private String materialId;
+        @Column(name = "nume", nullable = false)
+        private String nume;
 
         /**
-         * Unique identifier for the departament .
+         * Status of the order.
          */
-        private String departamenteId;
-
-        /**
-         * Quantity of the produse.
-         */
-        private String quantity;
-
-        /**
-         * Status of the comenzi (e.g., pending, completed).
-         */
+        @Column(name = "status", nullable = false)
         private String status;
 
         /**
-         * Date of the comenzi.
+         * Price of the order.
          */
-        private String date;
+        @Column(name = "cost", nullable = false)
+        private double cost;
 
         /**
-         * Total price of the comenzi.
+         * Quantity of the order.
          */
-        private String totalPrice;
+        @Column(name = "cantitate", nullable = false)
+        private int cantitate;
 
         /**
-         * Address of the comenzi.
+         * Date of the order.
          */
-        private String address;
+        @Column(name = "data", nullable = false)
+        private LocalDate data;
+
+        /**
+         * Description of the order.
+         */
+        @Column(name = "descriere", nullable = false)
+        private String descriere;
+
+        /**
+         * Identifier of the associated material.
+         */
+        @ManyToOne
+        @JoinColumn(name = "idMateriale", referencedColumnName = "idMateriale")
+        @JsonBackReference
+        private Materiale materiale;
 
 
 }

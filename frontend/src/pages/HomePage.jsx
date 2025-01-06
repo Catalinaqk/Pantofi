@@ -1,9 +1,9 @@
-import { getMaterialsNoPagination } from "../api/MaterialService.jsx";
-import { getComenzi } from "../api/ComenziService.jsx";
-import MaterialList from "../components/MaterialList.jsx";
-import { saveMaterial, saveMaterialPhoto } from "../api/MaterialService.jsx";
-import { useEffect, useRef, useState } from "react";
-import Header from "../components/Header.jsx";
+// eslint-disable-next-line no-unused-vars
+import React, { useState, useEffect, useRef } from 'react';
+import { getMaterialsNoPagination, saveMaterial, saveMaterialPhoto } from '../api/MaterialService';
+import { getComenzi } from '../api/ComenziService';
+import MaterialList from '../components/MaterialList';
+import Header from '../components/Header';
 
 function HomePage() {
     const fileMaterialRef = useRef(null);
@@ -36,7 +36,6 @@ function HomePage() {
         try {
             const { data } = await getMaterialsNoPagination();
             setData(data);
-            console.log(data);
         } catch (error) {
             console.error("Error getting materials", error);
         }
@@ -51,24 +50,16 @@ function HomePage() {
         }
     };
 
-    const onchangeBook = (event) => {
+    const onchangeMaterial = (event) => {
         setValuesMaterial({ ...valuesMaterial, [event.target.name]: event.target.value });
-        console.log(valuesMaterial);
     };
 
     const onchangeComenzi = (event) => {
         setValuesComenzi({ ...valuesComenzi, [event.target.name]: event.target.value });
-        console.log(valuesComenzi);
-    };
-
-    const onchangeMaterial = (event) => {
-        setValuesMaterial({ ...valuesMaterial, [event.target.name]: event.target.value });
-        console.log(valuesMaterial);
     };
 
     const onchangeMaterialFile = (event) => {
         setFileMaterial(event.target.files[0]);
-        console.log(fileMaterial);
     };
 
     const handleNewMaterial = async (event) => {
@@ -78,10 +69,9 @@ function HomePage() {
             const formData = new FormData();
             formData.append('file', fileMaterial, fileMaterial.name);
             formData.append("id", data.id);
-            const { data: photoURL } = await saveMaterialPhoto(formData);
+            await saveMaterialPhoto(formData);
             setFileMaterial(undefined);
             fileMaterialRef.current.value = null;
-            console.log(photoURL);
             setValuesMaterial({
                 name: "",
                 type: "",
@@ -129,7 +119,7 @@ function HomePage() {
                                 <div className="input-group mb-3">
                                     <span className="input-group-text" id="inputGroup-sizing-default">Nume:</span>
                                     <input type="text" name="name" value={valuesMaterial.name}
-                                           onChange={onchangeBook} className="form-control" aria-label="Sizing example input"
+                                           onChange={onchangeMaterial} className="form-control" aria-label="Sizing example input"
                                            aria-describedby="inputGroup-sizing-default" required />
                                 </div>
                                 <div className="input-group mb-3">
