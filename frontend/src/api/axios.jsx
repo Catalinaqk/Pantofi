@@ -6,5 +6,5 @@ import axios from 'axios';
  * @returns {AxiosInstance} The Axios instance configured with the base URL.
  */
 export default axios.create({
-    baseURL: 'http://localhost:8080'
+    baseURL: 'http://localhost:3306'
 });

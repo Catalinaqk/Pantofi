@@ -1,28 +1,22 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useRef } from 'react';
-import { getMaterialsNoPagination, saveMaterial, saveMaterialPhoto } from '../api/MaterialService';
+import { getMaterialsNoPagination, saveMaterial, updatePhoto } from '../api/MaterialeService';
 import { getComenzi } from '../api/ComenziService';
-import MaterialList from '../components/MaterialList';
-import Header from '../components/Header';
+import { Link } from 'react-router-dom';
+import MaterialList from '../components/MaterialeList';
+import Header from '../components/Header.jsx';
 
 function HomePage() {
     const fileMaterialRef = useRef(null);
     const [data, setData] = useState([]);
-    const [userType, setUserType] = useState('guest');
-    const [userName, setUserName] = useState('');
-    const [userEmail, setUserEmail] = useState('');
-    const [fileMaterial, setFileMaterial] = useState(undefined);
+    const [fileMaterial, setFileMaterial] = useState(null);
     const [valuesMaterial, setValuesMaterial] = useState({
-        name: "",
-        type: "",
+        nume: "",
+        tip: "",
         status: "",
-        price: "",
-        quantity: "",
-        date: "",
-        description: ""
+        descriere: ""
     });
     const [comenzi, setComenzi] = useState([]);
-    const [searchterm, setSearchterm] = useState('');
 
     const getAllMaterialsNoPagination = async () => {
         try {
@@ -53,25 +47,27 @@ function HomePage() {
     const handleNewMaterial = async (event) => {
         event.preventDefault();
         try {
-            const response = await saveMaterial(valuesMaterial);
+            const { data } = await saveMaterial(valuesMaterial);
+            console.log("Material saved:", data);
+
             const formData = new FormData();
             formData.append('file', fileMaterial, fileMaterial.name);
-            formData.append("id", response.data.id);
-            await saveMaterialPhoto(formData);
+            formData.append('id', data.id);
+            const { data: photoURL } = await updatePhoto(formData);
             setFileMaterial(undefined);
             fileMaterialRef.current.value = null;
+            console.log("Photo uploaded:", photoURL);
             setValuesMaterial({
-                name: "",
-                type: "",
+                nume: "",
+                tip: "",
                 status: "",
-                price: "",
-                quantity: "",
-                date: "",
-                description: ""
+                descriere: ""
             });
             getAllMaterialsNoPagination();
         } catch (error) {
-            console.error("Error saving material", error);
+            console.error("Error saving material:", error.response || error.message || error);
+            alert("Eroare la salvarea materialului!");
+            console.log("Material values:", valuesMaterial)
         }
     };
 
@@ -80,16 +76,16 @@ function HomePage() {
         getAllComenzi();
     }, []);
 
-    const filteredComenzi = comenzi.filter(comanda =>
-        `${comanda.name} ${comanda.status} ${comanda.price} ${comanda.quantity} ${comanda.date} ${comanda.description}`.toLowerCase().includes(searchterm.toLowerCase())
-    );
-
     return (
         <>
-            <Header departamentType={userType} departamentName={userName} departamentEmail={userEmail} setDepartamentType={setUserType} setDepartamentName={setUserName} setDepartamentEmail={setUserEmail} nbOfMaterials={data.length} />
+            <Header nbOfMaterials={data.length} />
             <main className="main">
                 <div className="container-fluid mt-3 mb-3">
                     <MaterialList materials={data} comenzi={comenzi} />
+                </div>
+
+                <div className="d-flex justify-content-center mt-3">
+                    <Link to="/comenzi" className="btn btn-primary">Gestionare Comenzi</Link>
                 </div>
             </main>
 
@@ -98,66 +94,29 @@ function HomePage() {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title">Adaugă material</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                            <h2 className="modal-title">Adaugă material</h2>
                         </div>
                         <form onSubmit={handleNewMaterial}>
                             <div className="modal-body">
                                 <div className="input-group mb-3">
-                                    <span className="input-group-text" id="inputGroup-sizing-default">Nume:</span>
-                                    <input type="text" name="name" value={valuesMaterial.name}
-                                           onChange={onchangeMaterial} className="form-control" aria-label="Sizing example input"
-                                           aria-describedby="inputGroup-sizing-default" required />
+                                    <span className="input-group-text">Nume:</span>
+                                    <input type="text" name="nume" value={valuesMaterial.nume}
+                                           onChange={onchangeMaterial} className="form-control" required />
                                 </div>
                                 <div className="input-group mb-3">
-                                    <span className="input-group-text" id="inputGroup-sizing-default">Comandă:</span>
-                                    <input type="text" name="searchTerm" value={searchterm}
-                                           onChange={(e) => setSearchterm(e.target.value)} className="form-control"
-                                           aria-label="Sizing example input"
-                                           aria-describedby="inputGroup-sizing-default" placeholder="Search comenzi" />
-                                    <select name="comenziId" value={valuesMaterial.comenziId} onChange={onchangeMaterial} className="form-control" required>
-                                        <option value="">Selectează comanda</option>
-                                        {filteredComenzi.map(comanda => (
-                                            <option key={comanda.id} value={comanda.id}>
-                                                {comanda.name} {comanda.status} {comanda.price} {comanda.quantity} {comanda.date} {comanda.description}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <span className="input-group-text">Tip:</span>
+                                    <input type="text" name="tip" value={valuesMaterial.tip}
+                                           onChange={onchangeMaterial} className="form-control" required />
                                 </div>
                                 <div className="input-group mb-3">
-                                    <span className="input-group-text" id="inputGroup-sizing-default">Tip:</span>
-                                    <input type="text" name="type" value={valuesMaterial.type}
-                                           onChange={onchangeMaterial} className="form-control"
-                                           aria-label="Sizing example input"
-                                           aria-describedby="inputGroup-sizing-default" required />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <span className="input-group-text" id="inputGroup-sizing-default">Status:</span>
+                                    <span className="input-group-text">Status:</span>
                                     <input type="text" name="status" value={valuesMaterial.status}
-                                           onChange={onchangeMaterial} className="form-control"
-                                           aria-label="Sizing example input"
-                                           aria-describedby="inputGroup-sizing-default" required />
+                                           onChange={onchangeMaterial} className="form-control" required />
                                 </div>
                                 <div className="input-group mb-3">
-                                    <span className="input-group-text" id="inputGroup-sizing-default">Preț:</span>
-                                    <input type="text" name="price" value={valuesMaterial.price}
-                                           onChange={onchangeMaterial} className="form-control"
-                                           aria-label="Sizing example input"
-                                           aria-describedby="inputGroup-sizing-default" required />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <span className="input-group-text" id="inputGroup-sizing-default">Cantitate:</span>
-                                    <input type="text" name="quantity" value={valuesMaterial.quantity}
-                                           onChange={onchangeMaterial} className="form-control"
-                                           aria-label="Sizing example input"
-                                           aria-describedby="inputGroup-sizing-default" required />
-                                </div>
-                                <div className="input-group mb-3">
-                                    <span className="input-group-text" id="inputGroup-sizing-default">Descriere:</span>
-                                    <input type="text" name="description" value={valuesMaterial.description}
-                                           onChange={onchangeMaterial} className="form-control"
-                                           aria-label="Sizing example input"
-                                           aria-describedby="inputGroup-sizing-default" required />
+                                    <span className="input-group-text">Descriere:</span>
+                                    <input type="text" name="descriere" value={valuesMaterial.descriere}
+                                           onChange={onchangeMaterial} className="form-control" required />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="formFileMaterial" className="form-label">Adaugă poză:</label>
@@ -166,8 +125,7 @@ function HomePage() {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" className="btn btn-primary">Save changes</button>
+                                <button type="submit" className="btn btn-primary">Save</button>
                             </div>
                         </form>
                     </div>

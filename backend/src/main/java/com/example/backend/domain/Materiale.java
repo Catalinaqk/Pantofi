@@ -46,21 +46,6 @@ public class Materiale {
     private String status;
 
     /**
-     * Price of the material.
-     */
-    private String cost;
-
-    /**
-     * Quantity of the material.
-     */
-    private String cantitate;
-
-    /**
-     * Date of the material.
-     */
-    private String data;
-
-    /**
      * Description of the material.
      */
     private String descriere;

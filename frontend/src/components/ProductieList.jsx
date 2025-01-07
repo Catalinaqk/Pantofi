@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 const ProductieList = ({ productie }) => {
     return (
         <div>
-            <h2>Productie</h2>
+            <h2>Producție</h2>
             <ul>
                 {productie.map(prod => (
-                    <li key={prod.id}>{prod.numeLucrator} - {prod.cantitateProdusa}</li>
+                    <li key={prod.id}>
+                        {prod.numeLucrator} - {prod.cantitateProdusa} unități
+                    </li>
                 ))}
             </ul>
         </div>

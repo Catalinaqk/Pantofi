@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * REST controller for managing Materiale entities.
- */
 @RestController
 @RequestMapping("/api/materiale")
 public class MaterialeResource {
