@@ -1,6 +1,6 @@
     // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useRef } from 'react';
-import { getMaterialsNoPagination, saveMaterial, updatePhoto } from '../api/MaterialeService';
+import { getMaterialsNoPagination, saveMaterial } from '../api/MaterialeService';
 import { getComenzi } from '../api/ComenziService';
 import { Link } from 'react-router-dom';
 import MaterialList from '../components/MaterialeList';
@@ -46,16 +46,9 @@ function HomePage() {
     const handleNewMaterial = async (event) => {
         event.preventDefault();
         try {
+            console.log("File material:", valuesMaterial);
             const { data } = await saveMaterial(valuesMaterial);
             console.log("Material saved:", data);
-
-            const formData = new FormData();
-            formData.append('file', fileMaterial, fileMaterial.name);
-            formData.append('id', data.id);
-            const { data: photoURL } = await updatePhoto(formData);
-            setFileMaterial(undefined);
-            fileMaterialRef.current.value = null;
-            console.log("Photo uploaded:", photoURL);
             setValuesMaterial({
                 nume: "",
                 tip: "",
@@ -117,12 +110,6 @@ function HomePage() {
                                     <span className="input-group-text">Descriere:</span>
                                     <input type="text" name="descriere" value={valuesMaterial.descriere}
                                            onChange={onchangeMaterial} className="form-control" required/>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="formFileMaterial" className="form-label">Adaugă poză:</label>
-                                    <input className="form-control" type="file" id="formFileMaterial"
-                                           ref={fileMaterialRef}
-                                           name="photoURL" onChange={onchangeMaterialFile} required/>
                                 </div>
                             </div>
                             <div className="modal-footer">

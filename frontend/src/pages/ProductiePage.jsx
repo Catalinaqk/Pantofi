@@ -24,9 +24,9 @@ const ProductiePage = () => {
         event.preventDefault();
         try {
             const productionData = {
-                worker,
+                numeLucrator: worker,
                 materialId: selectedMaterial,
-                quantity
+                cantitateProdusa: quantity
             };
             await saveProduction(productionData);
             alert("Producția a fost salvată!");

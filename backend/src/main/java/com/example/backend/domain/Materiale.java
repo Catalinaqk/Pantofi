@@ -49,9 +49,4 @@ public class Materiale {
      * Description of the material.
      */
     private String descriere;
-
-    /**
-     * URL of the material's photo.
-     */
-    private String photoURL;
 }

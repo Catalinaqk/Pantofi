@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const PRODUCTIE_API_BASE_URL = 'http://localhost:8080/productie';  // Adjust the base URL as needed
+const PRODUCTIE_API_BASE_URL = 'http://localhost:8080/api/productie';  // Adjust the base URL as needed
 
 /**
  * Saves the production data including worker, material, and quantity used.

@@ -10,6 +10,3 @@ export const saveMaterial = (material) => {
     return axios.post(API_URL, material);
 };
 
-export const updatePhoto = (formData) => {
-    return axios.post(`${API_URL}/upload`, formData);
-};

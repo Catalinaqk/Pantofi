@@ -24,10 +24,6 @@ const Material = ({ material , comenzi}) => {
         <Link to={`/materiale/${material.id}`} className="card" style={{textDecoration:'none'}}>
             <div className="card max-auto">
                 <div className="row g-0">
-                    <div className="col-md-4">
-                        {/* eslint-disable-next-line react/prop-types */}
-                        <img src={material.photoURL} className="img-fluid rounded-start" alt={material.nume} />
-                    </div>
                     <div className="col-md-8">
                         <div className="card-body">
                             {/* eslint-disable-next-line react/prop-types */}
