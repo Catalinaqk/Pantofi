@@ -90,7 +90,7 @@ function HomePage() {
                 </div>
             </main>
             <div className="modal fade" id="addMaterialBackDrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                 tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-atomic="true">
+                 tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-atomic="true" >
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
