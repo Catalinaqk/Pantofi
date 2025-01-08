@@ -1,9 +1,11 @@
-    // eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useRef } from 'react';
 import { getMaterialsNoPagination, saveMaterial } from '../api/MaterialeService';
 import { getComenzi } from '../api/ComenziService';
 import { Link } from 'react-router-dom';
 import MaterialList from '../components/MaterialeList';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function HomePage() {
     const fileMaterialRef = useRef(null);
@@ -13,7 +15,9 @@ function HomePage() {
         nume: "",
         tip: "",
         status: "",
-        descriere: ""
+        descriere: "",
+        data: "",
+        pret: ""
     });
     const [comenzi, setComenzi] = useState([]);
 
@@ -39,6 +43,10 @@ function HomePage() {
         setValuesMaterial({ ...valuesMaterial, [event.target.name]: event.target.value });
     };
 
+    const handleDateChange = (date) => {
+        setValuesMaterial({ ...valuesMaterial, data: date });
+    };
+
     const onchangeMaterialFile = (event) => {
         setFileMaterial(event.target.files[0]);
     };
@@ -47,15 +55,17 @@ function HomePage() {
         event.preventDefault();
         try {
             console.log("File material:", valuesMaterial);
-            const { data } = await saveMaterial(valuesMaterial);
-            console.log("Material saved:", data);
+            const { data: newMaterial } = await saveMaterial(valuesMaterial);
+            console.log("Material saved:", newMaterial);
             setValuesMaterial({
                 nume: "",
                 tip: "",
                 status: "",
-                descriere: ""
+                descriere: "",
+                data: "",
+                pret: ""
             });
-            getAllMaterialsNoPagination();
+            setData([...data, newMaterial]);
         } catch (error) {
             console.error("Error saving material:", error.response || error.message || error);
             alert("Eroare la salvarea materialului!");
@@ -72,14 +82,24 @@ function HomePage() {
         <>
             <main className="main">
                 <div className="container mt-3">
-                <button type="button" className="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#addMaterialBackDrop">
-                    Adaugă material
-                </button>
+                    <button type="button" className="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addMaterialBackDrop">
+                        Adaugă material
+                    </button>
                     <Link to="/comenzi" className="btn btn-primary ms-3">Gestionare Comenzi</Link>
                 </div>
                 <div className="container-fluid mt-3 mb-3">
                     <MaterialList materials={data} comenzi={comenzi}/>
+                </div>
+                <div className="container mt-3">
+                    <h2>Materiale adăugate</h2>
+                    <ul className="list-group">
+                        {data.map((material) => (
+                            <li key={material.id} className="list-group-item">
+                                 Materiale: {material.nume}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </main>
             <div className="modal fade" id="addMaterialBackDrop" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -111,10 +131,21 @@ function HomePage() {
                                     <input type="text" name="descriere" value={valuesMaterial.descriere}
                                            onChange={onchangeMaterial} className="form-control" required/>
                                 </div>
+                                <div className="input-group mb-3">
+                                    <span className="input-group-text">Data:</span>
+                                    <input type="text" name="data" value={valuesMaterial.data}
+                                           onChange={onchangeMaterial} className="form-control" required/>
+                                </div>
+                                <div className="input-group mb-3">
+                                    <span className="input-group-text">Pret:</span>
+                                    <input type="text" name="pret" value={valuesMaterial.pret}
+                                           onChange={onchangeMaterial} className="form-control" required/>
+                                </div>
                             </div>
                             <div className="modal-footer">
                                 <button type="submit" className="btn btn-primary">Save</button>
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -124,4 +155,4 @@ function HomePage() {
     );
 }
 
-    export default HomePage;
+export default HomePage;

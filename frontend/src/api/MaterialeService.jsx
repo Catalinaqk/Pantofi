@@ -6,7 +6,7 @@ export const getMaterialsNoPagination = () => {
     return axios.get(API_URL);
 };
 
-export const saveMaterial = (material) => {
-    return axios.post(API_URL, material);
+export const saveMaterial = (materiale) => {
+    return axios.post(API_URL, materiale);
 };
 

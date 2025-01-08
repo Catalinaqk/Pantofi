@@ -82,3 +82,12 @@ export async function deleteProduction(id) {
         throw error;
     }
 }
+
+export async function getProductions() {
+    try {
+        return await axios.get(`${PRODUCTIE_API_BASE_URL}`);
+    } catch (error) {
+        console.error("Eroare la obținerea producției:", error.response || error.message);
+        throw error;
+    }
+}

@@ -49,4 +49,15 @@ public class Materiale {
      * Description of the material.
      */
     private String descriere;
+
+    /**
+     * Date when the material was added.
+     */
+    private LocalDate data;
+
+    /**
+     * Price of the material.
+     */
+    private double pret;
+
 }
