@@ -1,10 +1,9 @@
-// eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useRef } from 'react';
 import { getMaterialsNoPagination, saveMaterial, updatePhoto } from '../api/MaterialeService';
 import { getComenzi } from '../api/ComenziService';
 import { Link } from 'react-router-dom';
 import MaterialList from '../components/MaterialeList';
-import Header from '../components/Header.jsx';
 
 function HomePage() {
     const fileMaterialRef = useRef(null);
@@ -78,17 +77,18 @@ function HomePage() {
 
     return (
         <>
-            <Header nbOfMaterials={data.length} />
             <main className="main">
-                <div className="container-fluid mt-3 mb-3">
-                    <MaterialList materials={data} comenzi={comenzi} />
+                <div className="container mt-3">
+                <button type="button" className="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#addMaterialBackDrop">
+                    Adaugă material
+                </button>
+                    <Link to="/comenzi" className="btn btn-primary ms-3">Gestionare Comenzi</Link>
                 </div>
-
-                <div className="d-flex justify-content-center mt-3">
-                    <Link to="/comenzi" className="btn btn-primary">Gestionare Comenzi</Link>
+                <div className="container-fluid mt-3 mb-3">
+                    <MaterialList materials={data} comenzi={comenzi}/>
                 </div>
             </main>
-
             <div className="modal fade" id="addMaterialBackDrop" data-bs-backdrop="static" data-bs-keyboard="false"
                  tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-atomic="true">
                 <div className="modal-dialog">
@@ -101,31 +101,33 @@ function HomePage() {
                                 <div className="input-group mb-3">
                                     <span className="input-group-text">Nume:</span>
                                     <input type="text" name="nume" value={valuesMaterial.nume}
-                                           onChange={onchangeMaterial} className="form-control" required />
+                                           onChange={onchangeMaterial} className="form-control" required/>
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text">Tip:</span>
                                     <input type="text" name="tip" value={valuesMaterial.tip}
-                                           onChange={onchangeMaterial} className="form-control" required />
+                                           onChange={onchangeMaterial} className="form-control" required/>
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text">Status:</span>
                                     <input type="text" name="status" value={valuesMaterial.status}
-                                           onChange={onchangeMaterial} className="form-control" required />
+                                           onChange={onchangeMaterial} className="form-control" required/>
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text">Descriere:</span>
                                     <input type="text" name="descriere" value={valuesMaterial.descriere}
-                                           onChange={onchangeMaterial} className="form-control" required />
+                                           onChange={onchangeMaterial} className="form-control" required/>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="formFileMaterial" className="form-label">Adaugă poză:</label>
-                                    <input className="form-control" type="file" id="formFileMaterial" ref={fileMaterialRef}
-                                           name="photoURL" onChange={onchangeMaterialFile} required />
+                                    <input className="form-control" type="file" id="formFileMaterial"
+                                           ref={fileMaterialRef}
+                                           name="photoURL" onChange={onchangeMaterialFile} required/>
                                 </div>
                             </div>
                             <div className="modal-footer">
                                 <button type="submit" className="btn btn-primary">Save</button>
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </form>
                     </div>
@@ -135,4 +137,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+    export default HomePage;

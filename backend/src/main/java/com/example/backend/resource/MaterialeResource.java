@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/materiale")
-public class MaterialeResource {
+public class    MaterialeResource {
 
     private final MaterialeService materialeService;
 

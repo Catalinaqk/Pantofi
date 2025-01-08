@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 // eslint-disable-next-line react/prop-types
 const Material = ({ material , comenzi}) => {
 
-    console.log(comenzi);
+    console.log(material);
     return(
         // eslint-disable-next-line react/prop-types
         <Link to={`/materiale/${material.id}`} className="card" style={{textDecoration:'none'}}>
